@@ -222,6 +222,8 @@ function init()
                   d.title = "只買" + person;
                   //text[0][3].textContent = "只買"+person;
               }
+              else
+                d.fixed = true
             }
             //console.log(hi);
           }
@@ -231,7 +233,7 @@ function init()
             d.x = d.px = d.initx;
             d.y = d.py = d.inity;
             if (idx == 3)
-              d.title = "只買一張";
+              d.title = "一支股票";
           }
           force.resume();
         })
