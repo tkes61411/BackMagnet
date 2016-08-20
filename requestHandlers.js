@@ -13,37 +13,18 @@ function start(request,response) {
 
     // add query type here!!
     var query    = url.parse(request.url).query;
-    var id       = querystring.parse(query)["id"];
-    var type     = querystring.parse(query)["type"];
-    var argu     = querystring.parse(query)["argu"];
-    console.log("Request for id=" + id + " type=" + type + " argu=" + argu);
+    console.log("Query is    " + query);
+    //var id       = querystring.parse(query)["id"];
+    //var type     = querystring.parse(query)["type"];
+    //var argu     = querystring.parse(query)["argu"];
+    //console.log("Request for id=" + id + " type=" + type + " argu=" + argu);
 
-    // type 1 : average with argument = 5 or 10 or 15
-    if(type == 1){
-        console.log("Type=1 Start to echo...");
-        const echo_fifo = exec_sync("printf " + type + " > fifo");
+    console.log("Start to echo...");
+    const echo_fifo = exec_sync("printf " + type + " > fifo");
 
-        console.log("Type=1 Start to cat...");
-        const cat_fifo = spawn_sync('cat', ['fifo']);
-        //console.log(cat_fifo.stdout.toString());
-    }
-    // type 2 : KD9
-    //else if(type == 2){
-    //    console.log("Type=2 Start to echo...");
-    //    const echo_fifo = exec_sync("printf " + type + " > fifo");
-
-    //    console.log("Type=2 Start to cat...");
-    //    const cat_fifo = spawn_sync('cat', ['fifo']);
-    //    console.log(cat_fifo.stdout.toString());
-    //}
-    //else if(type == 3){
-    //    console.log("Type=3 Start to echo...");
-    //    const echo_fifo = exec_sync("printf " + type + " > fifo");
-
-    //    console.log("Type=3 Start to cat...");
-    //    const cat_fifo = spawn_sync('cat', ['fifo']);
-    //    console.log(cat_fifo.stdout.toString());
-    //}
+    console.log("Start to cat...");
+    const cat_fifo = spawn_sync('cat', ['fifo']);
+    //console.log(cat_fifo.stdout.toString());
 
     // read c++ result
     var profit_string = fs.readFileSync('profit.rpt', 'utf8');
