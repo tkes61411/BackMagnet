@@ -13,6 +13,12 @@
 #include <vector>
 #include <map>
 #include "simulator.h"
+#include <fcntl.h>
+#include <stdio.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+#define MAX_BUF 1024
 
 using namespace std;
 
@@ -106,23 +112,30 @@ int main(int argc, char* argv[]) {
     fstockList.close();
     cout << "Finish" << endl;
    
-    StockSimulator sim;
+    int fd;
+    char * myfifo = "./myfifo";
+    char buf[MAX_BUF];
+    fd = open(myfifo, O_RDONLY);
     while (1) {
-        cout << "Setting ... ";
-        //sim->set(fin);
-        // TODO
-        cout << "Finish" << endl;
+        while(read(fd, buf, MAX_BUF) != 0) {
+            StockSimulator sim;
+            cout << "Setting ... ";
+            sim.set(buf);
+            // TODO
+            cout << "Finish" << endl;
 
-        cout << "Simulation ... ";
-        sim.run();
-        cout << "Finish" << endl;
+            cout << "Simulation ... ";
+            //sim.run();
+            cout << "Finish" << endl;
 
-        cout << "Writing ... ";
-        // TODO
-        cout << "Finish" << endl;
-        finish = clock();
-        duration = double(finish - start) / CLOCKS_PER_SEC;
-        cout <<"Run time : " <<  duration << " sec " << endl;
+            cout << "Writing ... ";
+            // TODO
+            cout << "Finish" << endl;
+            finish = clock();
+            duration = double(finish - start) / CLOCKS_PER_SEC;
+            cout <<"Run time : " <<  duration << " sec " << endl;
+        }
     }
+    close(fd);
     return 0;
 }

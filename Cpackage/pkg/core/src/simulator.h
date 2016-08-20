@@ -9,20 +9,28 @@
 #define _SIMULATOR_H
 
 #include <vector>
+#include <string>
 using namespace std;
 
 class StockSimulator {
     public :
+        enum {
+            GoldenCross = 0, 
+            PriceLargerThanAverage5,
+            PriceLargerThanAverage10,
+            PriceLargerThanAverage20,
+            DeadCross,
+            PriceSmallerThanAverage5,
+            PriceSmallerThanAverage10,
+            PriceSmallerThanAverage20
+        };
         StockSimulator();
-        //void set(); // parse script
-        void run();
+        void set(string); // parse script
+        void printInfo();
+        //void run();
         int stockID;
-        bool buyConstraint1; // KD good convergence
-        bool buyConstraint2; // 
-        bool buyConstraint3; //
-        bool sellConstraint1; // KD dead convergence
-        bool sellConstraint2; //
-        bool sellConstraint3; //
+        vector< vector<int> > buyCondition; 
+        vector< vector<int> > sellCondition;
         bool hold; // already have this stock
         float buyPrice;
         vector<int> gain;
