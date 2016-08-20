@@ -16,8 +16,10 @@ StockSimulator::StockSimulator() {
     gain_.clear();
 }
 
-bool StockSimulator::checkBuyCondition(vector<float> data) {
+bool StockSimulator::checkBuyCondition(vector<float> data, int idx, vector< vector<float> > weekData, vector< vector<float> > monthData) {
     bool result = false;
+    int wIdx = idx / 5; // which week?
+    int mIdx = idx / 22;
     for(unsigned int i = 0; i < buyCondition_.size(); ++i) { // for every OR condition 
         bool check = false;
         //if(buyCondition_.size() > 1 || buyCondition_[i].size() > 1) cout << "?" << endl;
@@ -30,12 +32,29 @@ bool StockSimulator::checkBuyCondition(vector<float> data) {
                     else 
                         check = false;
                     break;
+                case WeekGoldenCross:
+                    if (wIdx == 0) check = false;
+                    else {
+                        if (weekData[wIdx - 1][8] > weekData[wIdx - 1][9]) // K > D
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
+                case MonthGoldenCross:
+                    if (mIdx == 0) check = false;
+                    else {
+                        if (monthData[mIdx - 1][8] > monthData[mIdx - 1][9]) // K > D
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
                 case PriceLargerThanAverage5:
                     if (data[0] > data[5]) // Close > Average5
                         check = true;
                     else 
-                        check = false;
-                    
+                        check = false; 
                     break;
                 case PriceLargerThanAverage10:
                     if (data[0] > data[6]) // Close > Average10
@@ -49,11 +68,83 @@ bool StockSimulator::checkBuyCondition(vector<float> data) {
                     else 
                         check = false;
                     break;
+                case WeekPriceLargerThanAverage5:
+                    if (wIdx == 0) check = false;
+                    else {
+                        if (weekData[wIdx - 1][0] > weekData[wIdx - 1][5]) // Close > Average5
+                            check = true;
+                        else 
+                            check = false; 
+                    }
+                    break;
+                case WeekPriceLargerThanAverage10:
+                    if (wIdx == 0) check = false;
+                    else {
+                        if (weekData[wIdx - 1][0] > weekData[wIdx - 1][6]) // Close > Average10
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
+                case WeekPriceLargerThanAverage20:
+                    if (wIdx == 0) check = false;
+                    else {
+                        if (weekData[wIdx - 1][0] > weekData[wIdx - 1][7]) // Close > Average20
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
+                case MonthPriceLargerThanAverage5:
+                    if (mIdx == 0) check = false;
+                    else {
+                        if (monthData[mIdx - 1][0] > monthData[mIdx - 1][5]) // Close > Average5
+                            check = true;
+                        else 
+                            check = false; 
+                    }
+                    break;
+                case MonthPriceLargerThanAverage10:
+                    if (mIdx == 0) check = false;
+                    else {
+                        if (monthData[mIdx - 1][0] > monthData[mIdx - 1][6]) // Close > Average10
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
+                case MonthPriceLargerThanAverage20:
+                    if (mIdx == 0) check = false;
+                    else {
+                        if (monthData[mIdx - 1][0] > monthData[mIdx - 1][7]) // Close > Average20
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
                 case DeadCross:
                     if (data[9] > data[8]) // D > K
                         check = true;
                     else 
                         check = false;
+                    break;
+                case WeekDeadCross:
+                    if (wIdx == 0) check = false;
+                    else {
+                        if (weekData[wIdx - 1][9] > weekData[wIdx - 1][8]) // D > K
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
+                case MonthDeadCross:
+                    if (mIdx == 0) check = false;
+                    else {
+                        if (monthData[mIdx - 1][9] > monthData[mIdx - 1][8]) // D > K
+                            check = true;
+                        else 
+                            check = false;
+                    }
                     break;
                 case PriceLowerThanAverage5:
                     if (data[0] < data[5]) // Close < Average5
@@ -72,6 +163,60 @@ bool StockSimulator::checkBuyCondition(vector<float> data) {
                         check = true;
                     else 
                         check = false;
+                    break;
+                case WeekPriceLowerThanAverage5:
+                    if (wIdx == 0) check = false;
+                    else {
+                        if (weekData[wIdx - 1][0] < weekData[wIdx - 1][5]) // Close < Average5
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
+                case WeekPriceLowerThanAverage10:
+                    if (wIdx == 0) check = false;
+                    else {
+                        if (weekData[wIdx - 1][0] < weekData[wIdx - 1][6]) // Close < Average10
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
+                case WeekPriceLowerThanAverage20:
+                    if (wIdx == 0) check = false;
+                    else {
+                        if (weekData[wIdx - 1][0] < weekData[wIdx - 1][7]) // Close < Average20
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
+                case MonthPriceLowerThanAverage5:
+                    if (mIdx == 0) check = false;
+                    else {
+                        if (monthData[mIdx - 1][0] < monthData[mIdx - 1][5]) // Close < Average5
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
+                case MonthPriceLowerThanAverage10:
+                    if (mIdx == 0) check = false;
+                    else {
+                        if (monthData[mIdx - 1][0] < monthData[mIdx - 1][6]) // Close < Average10
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
+                case MonthPriceLowerThanAverage20:
+                    if (mIdx == 0) check = false;
+                    else {
+                        if (monthData[mIdx - 1][0] < monthData[mIdx - 1][7]) // Close < Average20
+                            check = true;
+                        else 
+                            check = false;
+                    }
                     break;
                 default :
                     cout << "Cannot recognize the condition";
@@ -84,8 +229,10 @@ bool StockSimulator::checkBuyCondition(vector<float> data) {
     return result;
 }
 
-bool StockSimulator::checkSellCondition(vector<float> data) {
+bool StockSimulator::checkSellCondition(vector<float> data, int idx, vector< vector<float> > weekData, vector< vector<float> > monthData) {
     bool result = false;
+    int wIdx = idx / 5; // which week?
+    int mIdx = idx / 22;
     for(unsigned int i = 0; i < sellCondition_.size(); ++i) { // for every OR condition 
         bool check = false;
         //if(sellCondition_.size() > 1 || sellCondition_[i].size() > 1) cout << "?" << endl;
@@ -98,11 +245,29 @@ bool StockSimulator::checkSellCondition(vector<float> data) {
                     else 
                         check = false;
                     break;
+                case WeekGoldenCross:
+                    if (wIdx == 0) check = false;
+                    else {
+                        if (weekData[wIdx - 1][8] > weekData[wIdx - 1][9]) // K > D
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
+                case MonthGoldenCross:
+                    if (mIdx == 0) check = false;
+                    else {
+                        if (monthData[mIdx - 1][8] > monthData[mIdx - 1][9]) // K > D
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
                 case PriceLargerThanAverage5:
                     if (data[0] > data[5]) // Close > Average5
                         check = true;
                     else 
-                        check = false;
+                        check = false; 
                     break;
                 case PriceLargerThanAverage10:
                     if (data[0] > data[6]) // Close > Average10
@@ -116,11 +281,83 @@ bool StockSimulator::checkSellCondition(vector<float> data) {
                     else 
                         check = false;
                     break;
+                case WeekPriceLargerThanAverage5:
+                    if (wIdx == 0) check = false;
+                    else {
+                        if (weekData[wIdx - 1][0] > weekData[wIdx - 1][5]) // Close > Average5
+                            check = true;
+                        else 
+                            check = false; 
+                    }
+                    break;
+                case WeekPriceLargerThanAverage10:
+                    if (wIdx == 0) check = false;
+                    else {
+                        if (weekData[wIdx - 1][0] > weekData[wIdx - 1][6]) // Close > Average10
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
+                case WeekPriceLargerThanAverage20:
+                    if (wIdx == 0) check = false;
+                    else {
+                        if (weekData[wIdx - 1][0] > weekData[wIdx - 1][7]) // Close > Average20
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
+                case MonthPriceLargerThanAverage5:
+                    if (mIdx == 0) check = false;
+                    else {
+                        if (monthData[mIdx - 1][0] > monthData[mIdx - 1][5]) // Close > Average5
+                            check = true;
+                        else 
+                            check = false; 
+                    }
+                    break;
+                case MonthPriceLargerThanAverage10:
+                    if (mIdx == 0) check = false;
+                    else {
+                        if (monthData[mIdx - 1][0] > monthData[mIdx - 1][6]) // Close > Average10
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
+                case MonthPriceLargerThanAverage20:
+                    if (mIdx == 0) check = false;
+                    else {
+                        if (monthData[mIdx - 1][0] > monthData[mIdx - 1][7]) // Close > Average20
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
                 case DeadCross:
                     if (data[9] > data[8]) // D > K
                         check = true;
                     else 
                         check = false;
+                    break;
+                case WeekDeadCross:
+                    if (wIdx == 0) check = false;
+                    else {
+                        if (weekData[wIdx - 1][9] > weekData[wIdx - 1][8]) // D > K
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
+                case MonthDeadCross:
+                    if (mIdx == 0) check = false;
+                    else {
+                        if (monthData[mIdx - 1][9] > monthData[mIdx - 1][8]) // D > K
+                            check = true;
+                        else 
+                            check = false;
+                    }
                     break;
                 case PriceLowerThanAverage5:
                     if (data[0] < data[5]) // Close < Average5
@@ -139,6 +376,60 @@ bool StockSimulator::checkSellCondition(vector<float> data) {
                         check = true;
                     else 
                         check = false;
+                    break;
+                case WeekPriceLowerThanAverage5:
+                    if (wIdx == 0) check = false;
+                    else {
+                        if (weekData[wIdx - 1][0] < weekData[wIdx - 1][5]) // Close < Average5
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
+                case WeekPriceLowerThanAverage10:
+                    if (wIdx == 0) check = false;
+                    else {
+                        if (weekData[wIdx - 1][0] < weekData[wIdx - 1][6]) // Close < Average10
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
+                case WeekPriceLowerThanAverage20:
+                    if (wIdx == 0) check = false;
+                    else {
+                        if (weekData[wIdx - 1][0] < weekData[wIdx - 1][7]) // Close < Average20
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
+                case MonthPriceLowerThanAverage5:
+                    if (mIdx == 0) check = false;
+                    else {
+                        if (monthData[mIdx - 1][0] < monthData[mIdx - 1][5]) // Close < Average5
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
+                case MonthPriceLowerThanAverage10:
+                    if (mIdx == 0) check = false;
+                    else {
+                        if (monthData[mIdx - 1][0] < monthData[mIdx - 1][6]) // Close < Average10
+                            check = true;
+                        else 
+                            check = false;
+                    }
+                    break;
+                case MonthPriceLowerThanAverage20:
+                    if (mIdx == 0) check = false;
+                    else {
+                        if (monthData[mIdx - 1][0] < monthData[mIdx - 1][7]) // Close < Average20
+                            check = true;
+                        else 
+                            check = false;
+                    }
                     break;
                 default :
                     cout << "Cannot recognize the condition";
@@ -156,6 +447,8 @@ void StockSimulator::run() {
     else if (stockID_ == 2) {/*TODO*/} // 10%
     else { // single stock
         vector < vector<float> > data = stockMap_[stockID_];
+        vector < vector<float> > weekData = weekStockMap_[stockID_];
+        vector < vector<float> > monthData = monthStockMap_[stockID_];
         hold_ = false; // true if we buy it
         gain_.clear();
         //gain_.push_back(0);
@@ -163,7 +456,7 @@ void StockSimulator::run() {
             vector<float> dailyData = data[i];
             //cout << i << endl;
             if (!hold_) { // check buy condition
-                bool check = checkBuyCondition(dailyData);
+                bool check = checkBuyCondition(dailyData, i, weekData, monthData);
                 if (check) {
                     //cout << "buy at " << i << " at price " << dailyData[0] << endl;
                     hold_ = true;
@@ -183,7 +476,7 @@ void StockSimulator::run() {
                 lastGain_ = gain_[gain_.size() - 1];
             }
             else { // check sell condition
-                bool check = checkSellCondition(dailyData);
+                bool check = checkSellCondition(dailyData, i, weekData, monthData);
                 if (check) {
                     //cout << "sell at " << i << "at price " << dailyData[0] << endl;
                     //cout << "gain " << lastGain_ * dailyData[0] / buyPrice_ << endl;
@@ -198,6 +491,12 @@ void StockSimulator::run() {
 
 void StockSimulator::setMap(map < int, vector < vector<float> > > m) {
    stockMap_ = m; 
+}
+void StockSimulator::setWeekMap(map < int, vector < vector<float> > > m) {
+   weekStockMap_ = m; 
+}
+void StockSimulator::setMonthMap(map < int, vector < vector<float> > > m) {
+   monthStockMap_ = m; 
 }
 void StockSimulator::set(string command) {
     //cout << command << endl; // for debugging
@@ -215,14 +514,11 @@ void StockSimulator::set(string command) {
     string andItem;
     while(getline(bc, andItem, '+')) {
         vector<int> andCondition;
-        int conditions = atoi(andItem.c_str());
-        while(conditions != 0) {
-            int singleCondition = conditions % 10;
-            conditions = conditions / 10;
-            //cout << singleCondition << " ";
-            andCondition.push_back(singleCondition);
+        istringstream ac(andItem);
+        string aitem;
+        while(getline(ac, aitem, '^')) {
+            andCondition.push_back(atoi(aitem.c_str()));
         }
-        //cout << endl;
         buyCondition_.push_back(andCondition);
     }
 
@@ -234,14 +530,11 @@ void StockSimulator::set(string command) {
     istringstream sc(token);
     while(getline(sc, andItem, '+')) {
         vector<int> andCondition;
-        int conditions = atoi(andItem.c_str());
-        while(conditions != 0) {
-            int singleCondition = conditions % 10;
-            conditions = conditions / 10;
-            cout << singleCondition << " ";
-            andCondition.push_back(singleCondition);
+        istringstream ac(andItem);
+        string aitem;
+        while(getline(ac, aitem, '^')) {
+            andCondition.push_back(atoi(aitem.c_str()));
         }
-        cout << endl;
         sellCondition_.push_back(andCondition);
     }
     //cout << endl;
@@ -283,6 +576,12 @@ void StockSimulator::printInfo() {
                case GoldenCross:
                    cout << "GoldenCross";
                    break;
+               case WeekGoldenCross:
+                   cout << "WeekGoldenCross";
+                   break;
+               case MonthGoldenCross:
+                   cout << "MonthGoldenCross";
+                   break;
                case PriceLargerThanAverage5:
                    cout << "PriceLagerThanAverage5";
                    break;
@@ -292,8 +591,32 @@ void StockSimulator::printInfo() {
                case PriceLargerThanAverage20:
                    cout << "PriceLagerThanAverage20";
                    break;
+               case WeekPriceLargerThanAverage5:
+                   cout << "WeekPriceLagerThanAverage5";
+                   break;
+               case WeekPriceLargerThanAverage10:
+                   cout << "WeekPriceLagerThanAverage10";
+                   break;
+               case WeekPriceLargerThanAverage20:
+                   cout << "WeekPriceLagerThanAverage20";
+                   break;
+               case MonthPriceLargerThanAverage5:
+                   cout << "MonthPriceLagerThanAverage5";
+                   break;
+               case MonthPriceLargerThanAverage10:
+                   cout << "MonthPriceLagerThanAverage10";
+                   break;
+               case MonthPriceLargerThanAverage20:
+                   cout << "MonthPriceLagerThanAverage20";
+                   break;
                case DeadCross:
                    cout << "DeadCross";
+                   break;
+               case WeekDeadCross:
+                   cout << "WeekDeadCross";
+                   break;
+               case MonthDeadCross:
+                   cout << "MonthDeadCross";
                    break;
                case PriceLowerThanAverage5:
                    cout << "PriceLowerThanAverage5";
@@ -303,6 +626,24 @@ void StockSimulator::printInfo() {
                    break;
                case PriceLowerThanAverage20:
                    cout << "PriceLowerThanAverage20";
+                   break;
+               case WeekPriceLowerThanAverage5:
+                   cout << "WeekPriceLowerThanAverage5";
+                   break;
+               case WeekPriceLowerThanAverage10:
+                   cout << "WeekPriceLowerThanAverage10";
+                   break;
+               case WeekPriceLowerThanAverage20:
+                   cout << "WeekPriceLowerThanAverage20";
+                   break;
+               case MonthPriceLowerThanAverage5:
+                   cout << "MonthPriceLowerThanAverage5";
+                   break;
+               case MonthPriceLowerThanAverage10:
+                   cout << "MonthPriceLowerThanAverage10";
+                   break;
+               case MonthPriceLowerThanAverage20:
+                   cout << "MonthPriceLowerThanAverage20";
                    break;
                default :
                    cout << "Cannot recognize the condition";
@@ -320,6 +661,12 @@ void StockSimulator::printInfo() {
                case GoldenCross:
                    cout << "GoldenCross";
                    break;
+               case WeekGoldenCross:
+                   cout << "WeekGoldenCross";
+                   break;
+               case MonthGoldenCross:
+                   cout << "MonthGoldenCross";
+                   break;
                case PriceLargerThanAverage5:
                    cout << "PriceLagerThanAverage5";
                    break;
@@ -329,8 +676,32 @@ void StockSimulator::printInfo() {
                case PriceLargerThanAverage20:
                    cout << "PriceLagerThanAverage20";
                    break;
+               case WeekPriceLargerThanAverage5:
+                   cout << "WeekPriceLagerThanAverage5";
+                   break;
+               case WeekPriceLargerThanAverage10:
+                   cout << "WeekPriceLagerThanAverage10";
+                   break;
+               case WeekPriceLargerThanAverage20:
+                   cout << "WeekPriceLagerThanAverage20";
+                   break;
+               case MonthPriceLargerThanAverage5:
+                   cout << "MonthPriceLagerThanAverage5";
+                   break;
+               case MonthPriceLargerThanAverage10:
+                   cout << "MonthPriceLagerThanAverage10";
+                   break;
+               case MonthPriceLargerThanAverage20:
+                   cout << "MonthPriceLagerThanAverage20";
+                   break;
                case DeadCross:
                    cout << "DeadCross";
+                   break;
+               case WeekDeadCross:
+                   cout << "WeekDeadCross";
+                   break;
+               case MonthDeadCross:
+                   cout << "MonthDeadCross";
                    break;
                case PriceLowerThanAverage5:
                    cout << "PriceLowerThanAverage5";
@@ -340,6 +711,24 @@ void StockSimulator::printInfo() {
                    break;
                case PriceLowerThanAverage20:
                    cout << "PriceLowerThanAverage20";
+                   break;
+               case WeekPriceLowerThanAverage5:
+                   cout << "WeekPriceLowerThanAverage5";
+                   break;
+               case WeekPriceLowerThanAverage10:
+                   cout << "WeekPriceLowerThanAverage10";
+                   break;
+               case WeekPriceLowerThanAverage20:
+                   cout << "WeekPriceLowerThanAverage20";
+                   break;
+               case MonthPriceLowerThanAverage5:
+                   cout << "MonthPriceLowerThanAverage5";
+                   break;
+               case MonthPriceLowerThanAverage10:
+                   cout << "MonthPriceLowerThanAverage10";
+                   break;
+               case MonthPriceLowerThanAverage20:
+                   cout << "MonthPriceLowerThanAverage20";
                    break;
                default :
                    cout << "Cannot recognize the condition";
