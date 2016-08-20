@@ -206,6 +206,8 @@ function init()
       .style("fill", function(d) {return color[d.type]; })
       .attr("stroke-width",0)
       .on("click",function(d,idx){
+          if (idx < 3)
+            return;
           if (move)
             return;
           if (d.fixed == true)
@@ -228,7 +230,8 @@ function init()
             d.fixed = true;
             d.x = d.px = d.initx;
             d.y = d.py = d.inity;
-            d.title = "只買一張";
+            if (idx == 3)
+              d.title = "只買一張";
           }
           force.resume();
         })
