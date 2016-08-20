@@ -1,12 +1,12 @@
 function init()
 {
 
-  var width = window.innerWidth,
+  var width = window.innerWidth - 400,
       height = 700;
   var fixMagnet = ['選股','進場','退場']
   var stocksSelection = ['一支股票','全部股票','前十獲利股'];
   var stocksEnter = ['超越5日平均','超越10日平均','超越20日平均'
-                    ,'日KD黃金交叉','月KD黃金交叉','年KD黃金交叉'
+                    ,'日KD黃金交叉','週KD黃金交叉','月KD黃金交叉'
                     ,'布林通道下緣'];
   var stocksExist = ['低於5日平均','低於10日平均','低於20日平均'
                     ,'日KD死亡交叉','月KD死亡交叉','年KD死亡交叉'
@@ -97,7 +97,8 @@ function init()
 
   svg.append("rect")
       .attr("width", width)
-      .attr("height", height);
+      .attr("height", height)
+      .attr("fill","white");
 
   svg.append("ellipse")
     .attr("cx",nodes[0].x)
@@ -205,12 +206,21 @@ function init()
       .style("fill", function(d) {return color[d.type]; })
       .attr("stroke-width",0)
       .on("click",function(d,idx){
-          console.log('click ',move)
           if (move)
             return;
           if (d.fixed == true)
           {
             d.fixed = false;
+            if (idx == 3)
+            {
+              var person = prompt("Please enter your favorate stock", "my stock");
+    
+              if (person != null) {
+                  console.log(person)
+                  d.title = "只買" + person;
+                  //text[0][3].textContent = "只買"+person;
+              }
+            }
             //console.log(hi);
           }
           else
@@ -218,6 +228,7 @@ function init()
             d.fixed = true;
             d.x = d.px = d.initx;
             d.y = d.py = d.inity;
+            d.title = "只買一張";
           }
           force.resume();
         })
@@ -231,8 +242,9 @@ function init()
   var textLabels = text.append("tspan")
                  .attr("text-anchor", "middle")
                  .attr("x", function(d) { return d.x; })
-                 .attr("y", function(d) { return d.y; })
+                 .attr("y", function(d,idx) { return d.y; })
                  .text( function (d) { return d.title; })
+                 .attr("font-size",function(d,idx){if(idx < 3)return 25;else return 15;});
 
   force.start();
 
@@ -265,9 +277,10 @@ function init()
         .attr("cy", function(d) { return d.y; });
 
     svg.selectAll("tspan")
+        .text(function(d){return d.title})
         .attr("text-anchor", "middle")
         .attr("x", function(d) { return d.x; })
-        .attr("y", function(d) { return d.y; })
+        .attr("y", function(d) { return d.y; });
   }
 
   function collide(node) {
@@ -294,4 +307,14 @@ function init()
           || y2 < ny1;
     };
   }
+}
+
+function sim()
+{
+  $('#loading').show();
+  document.getElementById('results-view').onload = function() {
+    $('#loading').hide();
+  };
+  document.getElementById('results-view').onload.src='http://localhost:8888/start?1504_1_1';
+
 }
