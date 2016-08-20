@@ -24,10 +24,14 @@ function sleep(milliSeconds) {
 var server = require("./server");
 var router = require("./router");
 var requestHandlers = require("./requestHandlers");
+var spawn = require("child_process").spawn;
 
 var handle = {}
 handle["/"] = requestHandlers.start;
 handle["/start"] = requestHandlers.start;
 handle["/upload"] = requestHandlers.upload;
+
+// launch ccode
+//const ccode = spawn("./simulator");
 
 server.start(router.route, handle);
