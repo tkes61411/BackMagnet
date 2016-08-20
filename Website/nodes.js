@@ -84,7 +84,7 @@ function init()
   };
   console.log(nodes)
 
-  var color = ['ff8f1f','28cfdf','a578ce'];
+  var color = ['FFE66F','70E4EF','ADF6B1'];
 
 
   var force = d3.layout.force()
