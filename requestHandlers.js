@@ -113,7 +113,7 @@ function start(request,response) {
 		'lineThickness: 3,'+
 		'name: "Target Gain",'+
 		//'markerType: "square",'+
-		'color: "#AD7100",'+
+		'color: "#FF8F1F",'+
 		'dataPoints: '+ profit_yaxis +
 		'},'+
 		'{        '+
