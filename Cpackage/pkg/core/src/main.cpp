@@ -289,10 +289,10 @@ int main(int argc, char* argv[]) {
    
     int fd;
     char * myfifo = "./Cpackage/myfifo";
-    char buf[MAX_BUF];
     fd = open(myfifo, O_RDONLY);
     cout << "Start ... " << endl;
     while (1) {
+        char buf[MAX_BUF];
         while(read(fd, buf, MAX_BUF) != 0) {
             StockSimulator sim;
             cout << "Setting ... " << endl;
