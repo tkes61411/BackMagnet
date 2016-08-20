@@ -289,10 +289,13 @@ int main(int argc, char* argv[]) {
    
     int fd;
     char * myfifo = "./Cpackage/myfifo";
-    char buf[MAX_BUF];
-    fd = open(myfifo, O_RDONLY);
     cout << "Start ... " << endl;
     while (1) {
+        fd = open(myfifo, O_RDONLY);
+        char buf[MAX_BUF];
+        for(int i = 0; i < MAX_BUF; ++i) {
+            buf[i] = '\0';
+        }
         while(read(fd, buf, MAX_BUF) != 0) {
             StockSimulator sim;
             cout << "Setting ... " << endl;
@@ -324,7 +327,7 @@ int main(int argc, char* argv[]) {
                 cout <<"Run time : " <<  duration << " sec " << endl;
             }
         }
+        close(fd);
     }
-    close(fd);
     return 0;
 }

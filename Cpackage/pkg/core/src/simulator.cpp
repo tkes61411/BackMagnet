@@ -773,7 +773,7 @@ void StockSimulator::printInfo() {
                    cout << "MonthPriceLowerThanAverage20";
                    break;
                default :
-                   cout << "Cannot recognize the condition";
+                   cout << "Cannot recognize the condition : " << sellCondition_[i][j];
            }
            if (j != sellCondition_[i].size() - 1) cout << " and ";
        }
