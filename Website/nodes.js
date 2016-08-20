@@ -1,3 +1,7 @@
+nodes = [];
+categorys = [0,1,2,0,0,0,1,1,1,1,1,1,1,2,2,2,2,2,2,2];
+person = -1
+svg = null
 function init()
 {
 
@@ -15,10 +19,11 @@ function init()
   text = fixMagnet.concat(stocksSelection)
                   .concat(stocksEnter)
                   .concat(stocksExist);
-  categorys = [0,1,2,0,0,0,1,1,1,1,1,1,1,2,2,2,2,2,2,2];
+  
+
   //assert(text.length == categorys.length);
 
-  nodes = [];
+  
   mainCirclePosY = []
   for (var i  = 0 ; i < text.length ; i += 1)
   {
@@ -90,7 +95,7 @@ function init()
       .on("tick", ticked)
       .start();
 
-  var svg = d3.select("#nodes").append("svg")
+  svg = d3.select("#nodes").append("svg")
       .attr("width", width)
       .attr("height", height);
       //.on("mousemove", mousemoved);
@@ -215,7 +220,7 @@ function init()
             d.fixed = false;
             if (idx == 3)
             {
-              var person = prompt("Please enter your favorate stock", "my stock");
+              person = prompt("Please enter your favorate stock", "my stock");
     
               if (person != null) {
                   console.log(person)
