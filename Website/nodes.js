@@ -13,7 +13,7 @@ function init()
                     ,'日KD黃金交叉','週KD黃金交叉','月KD黃金交叉'
                     ,'布林通道下緣'];
   var stocksExist = ['低於5日平均','低於10日平均','低於20日平均'
-                    ,'日KD死亡交叉','月KD死亡交叉','年KD死亡交叉'
+                    ,'日KD死亡交叉','週KD死亡交叉','月KD死亡交叉'
                     ,'布林通道上緣'];
   // create nodes
   text = fixMagnet.concat(stocksSelection)

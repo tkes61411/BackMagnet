@@ -89,7 +89,7 @@
           <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
         </div>
         <div class="col-md-4">
-          <h2>買賣磁鐵，增進系統效能</h2>
+          <h2>買賣磁鐵，增進策略效能</h2>
           <p>尋找坊間神人的磁鐵，讓您的策略達到前所未有的境界！ </p>
           <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
        </div>
@@ -110,6 +110,7 @@
       function sim()
       {
         $('#loading').show();
+        // Getting the height of the document
         to_c = [-1,-1,-1,-1,-1,-1,4,5,6,1,2,3,-1,16,17,18,13,14,15,-1];
         data = svg.selectAll("circle").data();
         var s1 = [];
@@ -143,7 +144,7 @@
         var combine = "";
         for (var i = 0 ; i < s1.length ; i += 1)
         {
-          if (s1[i].length == 0)
+          if (s1[i] === undefined || s1[i].length == 0)
             continue;
           var s = s1[i].substring(0, s1[i].length - 1);
           if (s === undefined)
@@ -151,12 +152,16 @@
           combine += s + '+';
         }
         if (s1.length == 0)
-          combine = '1+';
+        {
+          alert('沒有入場策略喔！請選擇進場策略～');
+          $('#loading').hide();
+          return;
+        }
         combine = combine.substring(0,combine.length - 1) + '_';
         console.log(combine);
         for (var i = 0 ; i < s2.length ; i += 1)
         {
-          if (s2[i].length == 0)
+          if (s2[i] === undefined || s2[i].length == 0)
             continue;
           var s = s2[i].substring(0, s2[i].length - 1);
           if (s === undefined)
