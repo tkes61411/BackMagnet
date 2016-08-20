@@ -20,14 +20,14 @@ function start(request,response) {
     //console.log("Request for id=" + id + " type=" + type + " argu=" + argu);
 
     console.log("Start to echo...");
-    //const echo_fifo = exec_sync("printf " + type + " > myfifo");
+    const echo_fifo = exec_sync("printf " + query + " > Cpackage/myfifo");
 
     console.log("Start to cat...");
-    //const cat_fifo = spawn_sync('cat', ['myfifo']);
-    //console.log(cat_fifo.stdout.toString());
+    const cat_fifo = spawn_sync('cat', ['Cpackage/myfifo2']);
+    console.log(cat_fifo.stdout.toString());
 
     // read c++ result
-    var profit_string = fs.readFileSync('profit.rpt', 'utf8');
+    var profit_string = fs.readFileSync('Cpackage/profit.rpt', 'utf8');
     var profit_array  = profit_string.split(", ");
     var profit_string = "[" + profit_string + "]";
 
@@ -36,7 +36,7 @@ function start(request,response) {
         labels_string = labels_string + "\" \", ";
     }
     labels_string = labels_string + "\"2016\"]";
-    console.log(labels_string);
+    //console.log(labels_string);
     //var fifty_array = fs.readFileSync('fifty.rpt', 'utf8');
     //var profit_array  = profit_string.split(" ");
 
@@ -75,6 +75,7 @@ function start(request,response) {
             'labels: ' + labels_string + ','+
             'datasets: ['+
             '{'+
+                'xAxisID: "1",'+
                 'label: "My First dataset",'+
                 'fillColor: "rgba(220,220,220,0.2)",'+
                 'strokeColor: "rgba(220,220,220,1)",'+
