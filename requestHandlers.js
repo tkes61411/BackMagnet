@@ -29,13 +29,24 @@ function start(request,response) {
     // read c++ result
     var profit_string = fs.readFileSync('Cpackage/profit.rpt', 'utf8');
     var profit_array  = profit_string.split(", ");
-    var profit_string = "[" + profit_string + "]";
-
-    var labels_string = "[\"2006\", ";
-    for(i = 0; i < profit_array.length - 2; i++){
-        labels_string = labels_string + "\" \", ";
+    var profit_yaxis = "[";
+    for(i = 0; i < profit_array.length - 1; i++){
+        profit_yaxis = profit_yaxis + "{x: " + i + ", y: " + profit_array[i] + "}, ";
     }
-    labels_string = labels_string + "\"2016\"]";
+    profit_yaxis = profit_yaxis + "{x: " + i + ", y: " + profit_array[profit_array.length-1] + "}]";
+
+    var total_string = fs.readFileSync('Cpackage/total.rpt', 'utf8');
+    var total_array  = total_string.split(", ");
+    var total_yaxis = "[";
+    for(i = 0; i < total_array.length - 1; i++){
+        total_yaxis = total_yaxis + "{x: " + i + ", y: " + total_array[i]/total_array[0] + "}, ";
+    }
+    total_yaxis = total_yaxis + "{x: " + i + ", y: " + total_array[total_array.length-1]/total_array[0] + "}]";
+    //var labels_string = "[\"2006\", ";
+    //for(i = 0; i < profit_array.length - 2; i++){
+    //    labels_string = labels_string + "\" \", ";
+    //}
+    //labels_string = labels_string + "\"2016\"]";
     //console.log(labels_string);
     //var fifty_array = fs.readFileSync('fifty.rpt', 'utf8');
     //var profit_array  = profit_string.split(" ");
@@ -58,40 +69,142 @@ function start(request,response) {
         //response.writeHeader(200, {"Content-Type": "text/html"});
         //response.write(html_file);
         //response.end();
+        
+        var body = '<!DOCTYPE HTML>'+
+		'<html>'+
+		'<head>'+
+		'<script type="text/javascript">'+
+		'window.onload = function () {'+
+		'var chart = new CanvasJS.Chart("chartContainer",'+
+		'{'+
+		'title:{'+
+		'text: "Site Traffic",'+
+		'fontSize: 30'+
+		'},'+
+		'animationEnabled: true,'+
+		'axisX:{'+
+        'title: "Timeline(Days)",'+
+		'gridColor: "Silver",'+
+		'tickColor: "silver",'+
+        'interval:2600,'+
+		//'valueFormatString: "DD/MMM"'+
+		'},'+
+		'toolTip:{'+
+		'shared:true'+
+		'},'+
+		'theme: "theme2",'+
+		'axisY: {'+
+        'title: "Gain(Normalized)",'+
+		'gridColor: "Silver",'+
+		'tickColor: "silver",'+
+        //'maximum: 2,'+
+        //'minimum: -2,'+
+        'interval: 0.5,'+
+		'},'+
+		'legend:{'+
+        'fontSize: 22,'+
+		'verticalAlign: "center",'+
+		'horizontalAlign: "right"'+
+		'},'+
+		'data: ['+
+		'{'+
+		'type: "line",'+
+		'showInLegend: true,'+
+		'lineThickness: 3,'+
+		'name: "Target Gain",'+
+		//'markerType: "square",'+
+		'color: "#FF8F1F",'+
+		'dataPoints: '+ profit_yaxis +
+		'},'+
+		'{        '+
+		'type: "line",'+
+		'showInLegend: true,'+
+		'name: "Composite Index",'+
+		'color: "#919191",'+
+		'lineThickness: 2,'+
+		'dataPoints: '+ total_yaxis +
+		'}'+
+		'],'+
+		'legend:{'+
+		'cursor:"pointer",'+
+		'itemclick:function(e){'+
+		'if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {'+
+		'e.dataSeries.visible = false;'+
+		'}'+
+		'else{'+
+		'e.dataSeries.visible = true;'+
+		'}'+
+		'chart.render();'+
+		'}'+
+		'}'+
+		'});'+
+		'chart.render();'+
+		'}'+
+		'</script>'+
+		'<script type="text/javascript" src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>'+
+		'</head>'+
+		'<body>'+
+		'<div id="chartContainer" style="height: 300px; width: 100%;">'+
+		'</div>'+
+		'</body>'+
+		'</html>';
 
-        var body = '<!DOCTYPE html>'+
-        '<html>'+
-        '<head>'+
-        '<title></title>'+
-        '<meta charset="utf-8" />'+
-        '<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>'+
-        '<style>'+
-        '</style>'+
-        '</head>'+
-        '<body>'+
-        '<canvas id="myChart"></canvas>'+
-        '<script>'+
-        'var data = {'+
-            'labels: ' + labels_string + ','+
-            'datasets: ['+
-            '{'+
-                'xAxisID: "1",'+
-                'label: "My First dataset",'+
-                'fillColor: "rgba(220,220,220,0.2)",'+
-                'strokeColor: "rgba(220,220,220,1)",'+
-                'pointColor: "rgba(220,220,220,1)",'+
-                'pointStrokeColor: "#fff",'+
-                'pointHighlightFill: "#fff",'+
-                'pointHighlightStroke: "rgba(220,220,220,1)",'+
-                'data: ' + profit_string +
-            '}'+
-            ']'+
-        '};'+
-        'var ctx = document.getElementById("myChart").getContext("2d");'+
-        'var myNewChart = new Chart(ctx).Line(data);'+
-        '</script>'+
-        '</body>'+
-        '</html>';
+
+
+        //var body = '<!DOCTYPE html>'+
+        //'<html>'+
+        //'<head>'+
+        //'<title></title>'+
+        //'<meta charset="utf-8" />'+
+        //'<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.1/Chart.js"></script>'+
+        //'<style>'+
+        //'</style>'+
+        //'</head>'+
+        //'<body>'+
+        //'<canvas id="myChart"></canvas>'+
+        //'<script>'+
+        //'var data = {'+
+        //    'labels: ' + labels_string + ','+
+        //        'datasets: ['+
+        //        '{'+
+        //        'label: "My First dataset",'+
+        //        'fill: true,'+
+        //        'lineTension: 0.1,'+
+        //        'backgroundColor: "rgba(75,192,192,0.4)",'+
+        //        'borderColor: "rgba(192,75,0,1)",'+
+        //        'borderCapStyle: \'butt\','+
+        //        'borderDash: [],'+
+        //        'borderDashOffset: 0.0,'+
+        //        'borderJoinStyle: \'miter\','+
+        //        'pointBorderColor: "rgba(75,192,192,1)",'+
+        //        'pointBackgroundColor: "#fff",'+
+        //        'pointBorderWidth: 0,'+
+        //        'pointHoverRadius: 0,'+
+        //        'pointHoverBorderColor: "rgba(220,220,220,1)",'+
+        //        'pointHoverBorderWidth: 0,'+
+        //        'pointRadius: 0,'+
+        //        'pointHitRadius: 0,'+
+        //        'spanGaps: false,'+
+        //        'radius: 0,'+
+        //        //'label: "My First dataset",'+
+        //        //'fillColor: "rgba(220,220,220,0.2)",'+
+        //        //'strokeColor: "rgba(220,220,220,1)",'+
+        //        //'pointColor: "rgba(220,220,220,1)",'+
+        //        //'pointStrokeColor: "#fff",'+
+        //        //'pointHighlightFill: "#fff",'+
+        //        //'pointHighlightStroke: "rgba(220,220,220,1)",'+
+        //        'data: ' + profit_string + ',' +
+        //    '}'+
+        //    ']'+
+        //'};'+
+        //'var ctx = document.getElementById("myChart").getContext("2d");'+
+        //'ctx.canvas.width = 1200;'+
+        //'ctx.canvas.height = 600;'+
+        //'var myNewChart = new Chart(ctx).Line(data);'+
+        //'myNewChart.reDraw();'+
+        //'</script>'+
+        //'</body>'+
+        //'</html>';
 
         response.writeHead(200, {"Content-Type": "text/html"});
         response.write(body);
