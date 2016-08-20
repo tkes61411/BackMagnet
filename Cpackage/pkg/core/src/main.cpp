@@ -33,8 +33,8 @@ int main(int argc, char* argv[]) {
     //StockSimulator sim;
     start = clock();
     cout << "Initialize ... " << endl;
-    system("ls stocks > stock.list");
-    fstockList.open("./stock.list", ios::in);
+    system("ls Cpackage/stocks > Cpackage/stock.list");
+    fstockList.open("./Cpackage/stock.list", ios::in);
     while (fstockList >> fname) { // for every stock
         istringstream ss(fname);
         string token;
@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
         string stockID;
         getline(ss2, stockID, 's');
         getline(ss2, stockID, 's'); // stockID
-        fname = "stocks/" + fname; // where the file is
+        fname = "Cpackage/stocks/" + fname; // where the file is
     
         fstock.open(fname.c_str(), ios::in);  
         fstock >> line; //skip first line
@@ -112,7 +112,7 @@ int main(int argc, char* argv[]) {
     fstockList.close();
    
     int fd;
-    char * myfifo = "./myfifo";
+    char * myfifo = "./Cpackage/myfifo";
     char buf[MAX_BUF];
     fd = open(myfifo, O_RDONLY);
     cout << "Start ... " << endl;

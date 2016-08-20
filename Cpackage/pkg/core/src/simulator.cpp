@@ -242,13 +242,13 @@ void StockSimulator::set(string command) {
 
 void StockSimulator::printGain() {
     fstream fout;
-    fout.open("profit.rpt",ios::out);
+    fout.open("Cpackage/profit.rpt",ios::out);
     fout << gain_[0];
     for (unsigned int i = 1; i < gain_.size(); ++i) {
         fout << ", " << gain_[i];
     }
      int fd;
-     char * myfifo = "./myfifo2";
+     char * myfifo = "./Cpackage/myfifo2";
      //cout << result << endl;
      /* create the FIFO (named pipe) */
      mkfifo(myfifo, 0666);
