@@ -90,7 +90,7 @@ function start(request,response) {
 		'animationEnabled: true,'+
         'animationDuration: 600,'+
 		'axisX:{'+
-        'title: "Timeline(Days)",'+
+        'title: "Timeline(Days, with recent 7 years)",'+
 		'gridColor: "Silver",'+
 		'tickColor: "silver",'+
         'interval:2600,'+
