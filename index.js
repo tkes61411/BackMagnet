@@ -32,6 +32,6 @@ handle["/start"] = requestHandlers.start;
 handle["/upload"] = requestHandlers.upload;
 
 // launch ccode
-//const ccode = spawn("./simulator");
+const ccode = spawn("./simulation");
 
 server.start(router.route, handle);
