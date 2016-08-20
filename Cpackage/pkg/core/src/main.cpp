@@ -25,14 +25,14 @@ using namespace std;
 int main(int argc, char* argv[]) {
     
     /// Parse data ///
-    fstream fin, fout, fstockList, fstock;
+    fstream fstockList, fstock;
     map< int, vector< vector<float> > > stockMap;
     clock_t start, finish;
     double duration;
     string fname, line;
     //StockSimulator sim;
     start = clock();
-    cout << "Initialize ... ";
+    cout << "Initialize ... " << endl;
     system("ls stocks > stock.list");
     fstockList.open("./stock.list", ios::in);
     while (fstockList >> fname) { // for every stock
@@ -110,26 +110,25 @@ int main(int argc, char* argv[]) {
         fstock.close();
     }
     fstockList.close();
-    cout << "Finish" << endl;
    
     int fd;
     char * myfifo = "./myfifo";
     char buf[MAX_BUF];
     fd = open(myfifo, O_RDONLY);
+    cout << "Start ... " << endl;
     while (1) {
         while(read(fd, buf, MAX_BUF) != 0) {
             StockSimulator sim;
-            cout << "Setting ... ";
+            cout << "Setting ... " << endl;
+            sim.setMap(stockMap);
             sim.set(buf);
-            // TODO
-            cout << "Finish" << endl;
 
             cout << "Simulation ... ";
-            //sim.run();
+            sim.run();
             cout << "Finish" << endl;
 
             cout << "Writing ... ";
-            // TODO
+            sim.printGain();
             cout << "Finish" << endl;
             finish = clock();
             duration = double(finish - start) / CLOCKS_PER_SEC;

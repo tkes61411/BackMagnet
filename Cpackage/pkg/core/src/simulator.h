@@ -10,31 +10,38 @@
 
 #include <vector>
 #include <string>
+#include <map>
 using namespace std;
 
 class StockSimulator {
     public :
         enum {
-            GoldenCross = 0, 
+            GoldenCross = 1, 
             PriceLargerThanAverage5,
             PriceLargerThanAverage10,
             PriceLargerThanAverage20,
             DeadCross,
-            PriceSmallerThanAverage5,
-            PriceSmallerThanAverage10,
-            PriceSmallerThanAverage20
+            PriceLowerThanAverage5,
+            PriceLowerThanAverage10,
+            PriceLowerThanAverage20
         };
         StockSimulator();
+        void setMap(map< int, vector< vector<float> > >);
         void set(string); // parse script
         void printInfo();
-        //void run();
-        int stockID;
-        vector< vector<int> > buyCondition; 
-        vector< vector<int> > sellCondition;
-        bool hold; // already have this stock
-        float buyPrice;
-        vector<int> gain;
-
+        void printGain();
+        void run();
+        bool checkBuyCondition(vector< float>);
+        bool checkSellCondition(vector< float>);
+        int stockID_;
+        string buyCommand_, sellCommand_;
+        vector< vector<int> > buyCondition_; 
+        vector< vector<int> > sellCondition_;
+        bool hold_; // already have this stock
+        float buyPrice_;
+        float lastGain_;
+        vector<float> gain_;
+        map < int, vector < vector<float> > > stockMap_;
 
 
 };
