@@ -110,10 +110,73 @@
       function sim()
       {
         $('#loading').show();
+        to_c = [-1,-1,-1,-1,-1,-1,4,5,6,1,2,3,-1,16,17,18,13,14,15,-1];
+        data = svg.selectAll("circle").data();
+        var s1 = [];
+        var s2 = [];
+        for (var i = 0 ; i < data.length ; i += 1)
+        {
+          if (to_c[i] == -1 || i < 3 || data[i].fixed == true)
+            continue;
+          if (categorys[i] == 0)
+            continue;
+          console.log(i+' '+to_c[i])
+          switch (categorys[i])
+          {
+            case 1:
+              if (s1[data[i].level/50 - 2] === undefined)
+                s1[data[i].level/50 - 2] = ""
+              s1[data[i].level/50 - 2] += "" + to_c[i] + '^';
+              break;
+            case 2:
+              if (s2[data[i].level/50 - 2] === undefined)
+                s2[data[i].level/50 - 2] = ""
+              s2[data[i].level/50 - 2] += "" + to_c[i] + '^';
+              break;
+            default:
+              console.log('bug!!!');
+          }
+          console.log(s1);
+          console.log(s2);
+        }
 
+        var combine = "";
+        for (var i = 0 ; i < s1.length ; i += 1)
+        {
+          if (s1[i].length == 0)
+            continue;
+          var s = s1[i].substring(0, s1[i].length - 1);
+          if (s === undefined)
+            continue
+          combine += s + '+';
+        }
+        if (s1.length == 0)
+          combine = '1+';
+        combine = combine.substring(0,combine.length - 1) + '_';
+        console.log(combine);
+        for (var i = 0 ; i < s2.length ; i += 1)
+        {
+          if (s2[i].length == 0)
+            continue;
+          var s = s2[i].substring(0, s2[i].length - 1);
+          if (s === undefined)
+            continue
+          combine += s + '+';
+        }
+        if (combine.length > 1)
+        combine = combine.substring(0,combine.length - 1);
+        if (s2.length == 0)
+          combine += '_13'
+
+        var stock = "";
+        if (person == -1)
+          stock =  "0050"
+        else
+          stock = person;
+        
         var iframe = $('#results-view');
         console.log(iframe)
-        iframe.attr('src','http://localhost:8888/start?1504_1_1');
+        iframe.attr('src','http://localhost:8888/start?'+stock+"_"+combine);
         document.getElementById('results-view').onload = function() {
           this.style.height=500+'px';
           $('#loading').hide();
