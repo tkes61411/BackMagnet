@@ -20,6 +20,7 @@ bool StockSimulator::checkBuyCondition(vector<float> data) {
     bool result = false;
     for(unsigned int i = 0; i < buyCondition_.size(); ++i) { // for every OR condition 
         bool check = false;
+        //if(buyCondition_.size() > 1 || buyCondition_[i].size() > 1) cout << "?" << endl;
         // close, high, low, open, vol, avaerage5, average10, average20, K9, D9
         for (unsigned int j = 0; j < buyCondition_[i].size(); ++j) { // for every AND condition
             switch(buyCondition_[i][j]) {
@@ -87,6 +88,7 @@ bool StockSimulator::checkSellCondition(vector<float> data) {
     bool result = false;
     for(unsigned int i = 0; i < sellCondition_.size(); ++i) { // for every OR condition 
         bool check = false;
+        //if(sellCondition_.size() > 1 || sellCondition_[i].size() > 1) cout << "?" << endl;
         // close, high, low, open, vol, avaerage5, average10, average20, K9, D9
         for (unsigned int j = 0; j < sellCondition_[i].size(); ++j) { // for every AND condition
             switch(sellCondition_[i][j]) {
@@ -153,37 +155,43 @@ void StockSimulator::run() {
     if (stockID_ == 1) {/*TODO*/} // all stock    
     else if (stockID_ == 2) {/*TODO*/} // 10%
     else { // single stock
-        cout << "Single Stock Mode" << endl;
         vector < vector<float> > data = stockMap_[stockID_];
         hold_ = false; // true if we buy it
         gain_.clear();
         //gain_.push_back(0);
         for (unsigned int i = 0; i < data.size(); ++i) { // every day
             vector<float> dailyData = data[i];
+            //cout << i << endl;
             if (!hold_) { // check buy condition
                 bool check = checkBuyCondition(dailyData);
                 if (check) {
+                    //cout << "buy at " << i << " at price " << dailyData[0] << endl;
                     hold_ = true;
                     buyPrice_ = dailyData[0];
                     if (gain_.size() == 0) 
-                        gain_.push_back(0);
+                        gain_.push_back(1);
                     else
                         gain_.push_back(gain_[gain_.size() - 1]);
+                    //cout << "current gain : " << gain_[gain_.size() - 1] << endl;
                     
                 } else {
                     if (gain_.size() == 0) 
-                        gain_.push_back(0);
+                        gain_.push_back(1);
                     else
                         gain_.push_back(gain_[gain_.size() - 1]);
                 }
                 lastGain_ = gain_[gain_.size() - 1];
             }
-            else if (hold_) { // check sell condition
+            else { // check sell condition
                 bool check = checkSellCondition(dailyData);
-                if (check) 
+                if (check) {
+                    //cout << "sell at " << i << "at price " << dailyData[0] << endl;
+                    //cout << "gain " << lastGain_ * dailyData[0] / buyPrice_ << endl;
                     hold_ = false;
-                gain_.push_back(lastGain_ + (dailyData[0] - buyPrice_) / buyPrice_ * 100);
+                }
+                gain_.push_back(lastGain_ * dailyData[0] / buyPrice_);
             }
+            //cout << i << " d" << endl;
         }
     }
 }
@@ -240,6 +248,14 @@ void StockSimulator::set(string command) {
     printInfo();
 }
 
+void StockSimulator::printMap() {
+    vector< vector<float> > temp = stockMap_[50];
+    for (unsigned int i = 0; i < temp.size(); ++i) {
+        for (unsigned int j = 0; j < temp[i].size(); ++j)
+            cout << temp[i][j] << ",";
+        cout << endl;
+    }
+}
 void StockSimulator::printGain() {
     fstream fout;
     fout.open("Cpackage/profit.rpt",ios::out);

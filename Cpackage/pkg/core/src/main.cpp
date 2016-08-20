@@ -89,11 +89,11 @@ int main(int argc, char* argv[]) {
             for (int i = 0; i < 8; ++i) {
                 if (data.size() - i <= 0) break;
                 if (data[data.size() - 1 - i][1] > highest9) highest9 = data[data.size() - 1 - i][1];
-                if (data[data.size() - 1 - i][2] > lowest9) lowest9 = data[data.size() - 1 - i][2];
+                if (data[data.size() - 1 - i][2] < lowest9) lowest9 = data[data.size() - 1 - i][2];
             }
-            rsv = (todayClose - lowest9) / (highest9 - lowest9) * 100; // calculate rsv
+            rsv = 100 * (todayClose - lowest9) / (highest9 - lowest9); // calculate rsv
             float lastK9, lastD9;
-            if (data.size() == 0) lastK9 = lastD9 = 0;
+            if (data.size() == 0) lastK9 = lastD9 = 50;
             else {
                 lastK9 = data[data.size() - 1][8];
                 lastD9 = data[data.size() - 1][9];
@@ -103,6 +103,10 @@ int main(int argc, char* argv[]) {
             dailyData.push_back(K9);
             dailyData.push_back(D9);
 
+            /*for(unsigned int i = 0; i < dailyData.size(); ++i) {
+                cout << dailyData[i] << ",";
+            }
+            cout << endl;*/
             // push back new data
             data.push_back(dailyData);
         }
@@ -121,6 +125,7 @@ int main(int argc, char* argv[]) {
             StockSimulator sim;
             cout << "Setting ... " << endl;
             sim.setMap(stockMap);
+            //sim.printMap();
             sim.set(buf);
 
             cout << "Simulation ... ";

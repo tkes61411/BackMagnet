@@ -30,6 +30,7 @@ class StockSimulator {
         void set(string); // parse script
         void printInfo();
         void printGain();
+        void printMap();
         void run();
         bool checkBuyCondition(vector< float>);
         bool checkSellCondition(vector< float>);
