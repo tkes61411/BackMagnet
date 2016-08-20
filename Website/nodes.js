@@ -308,13 +308,3 @@ function init()
     };
   }
 }
-
-function sim()
-{
-  $('#loading').show();
-  document.getElementById('results-view').onload = function() {
-    $('#loading').hide();
-  };
-  document.getElementById('results-view').onload.src='http://localhost:8888/start?1504_1_1';
-
-}
