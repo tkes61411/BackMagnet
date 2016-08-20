@@ -16,19 +16,25 @@ rect{
 }
 
 circle {
-  
+
 }
 </style>
 <link rel="stylesheet" type="text/css" href="normalize.css" media="screen">
 <body>
 <script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
 <script src="nodes.js"></script>
 <div style=""><h1 style="text-align:center;">回測磁鐵</h1></div>
 </div>
 <div id='nodes'></div>
 <div style="position:fixed;bottom:10px;right:10px;background:gray;width:100px;height:100px" onclick="document.getElementById('results-view').src='http://localhost:8888/start?1504_1_1';"><h2>回測</h2></div>
 <script>init()</script>
+<script>
+<script type="text/javascript">
+    function resizeIframe(obj){
+    }
 
-<iframe src="" id="results-view"></iframe>
+</script>
+<iframe scrolling="no" id="results-view" style="width:100%;border-width:0;height:700px"></iframe> 
 
 </body>
