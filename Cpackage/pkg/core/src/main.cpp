@@ -301,17 +301,28 @@ int main(int argc, char* argv[]) {
             sim.setMonthMap(monthStockMap);
             //sim.printMap();
             sim.set(buf);
+            if (sim.stockMap_.find(sim.stockID_) == sim.stockMap_.end()) {
+                int fd;
+                char * myfifo = "./Cpackage/myfifo2";
+                //cout << result << endl;
+                /* create the FIFO (named pipe) */
+                mkfifo(myfifo, 0666);
+                /* write to the FIFO */
+                fd = open(myfifo, O_WRONLY);
+                write(fd, "noID", sizeof("noID"));
+                close(fd);
+            } else {
+                cout << "Simulation ... ";
+                sim.run();
+                cout << "Finish" << endl;
 
-            cout << "Simulation ... ";
-            sim.run();
-            cout << "Finish" << endl;
-
-            cout << "Writing ... ";
-            sim.printGain();
-            cout << "Finish" << endl;
-            finish = clock();
-            duration = double(finish - start) / CLOCKS_PER_SEC;
-            cout <<"Run time : " <<  duration << " sec " << endl;
+                cout << "Writing ... ";
+                sim.printGain();
+                cout << "Finish" << endl;
+                finish = clock();
+                duration = double(finish - start) / CLOCKS_PER_SEC;
+                cout <<"Run time : " <<  duration << " sec " << endl;
+            }
         }
     }
     close(fd);

@@ -38,10 +38,16 @@ function start(request,response) {
     var total_string = fs.readFileSync('Cpackage/total.rpt', 'utf8');
     var total_array  = total_string.split(", ");
     var total_yaxis = "[";
+    var diff_yaxis = "[";
+    var temp = total_array[0];
     for(i = 0; i < total_array.length - 1; i++){
-        total_yaxis = total_yaxis + "{x: " + i + ", y: " + total_array[i]/total_array[0] + "}, ";
+        total_array[i] = total_array[i]/temp;
+        total_yaxis = total_yaxis + "{x: " + i + ", y: " + total_array[i] + "}, ";
+        diff_yaxis = diff_yaxis + "{x: " + i + ", y: " + (profit_array[i]-total_array[i]) + "}, ";
     }
-    total_yaxis = total_yaxis + "{x: " + i + ", y: " + total_array[total_array.length-1]/total_array[0] + "}]";
+    total_yaxis = total_yaxis + "{x: " + i + ", y: " + total_array[profit_array.length-1]/temp + "}]";
+    diff_yaxis = diff_yaxis + "{x: " + i + ", y: " + (profit_array[total_array.length-1]-total_array[total_array.length-1]) + "}]";
+    //console.log(diff_yaxis);
     //var labels_string = "[\"2006\", ";
     //for(i = 0; i < profit_array.length - 2; i++){
     //    labels_string = labels_string + "\" \", ";
@@ -78,12 +84,13 @@ function start(request,response) {
 		'var chart = new CanvasJS.Chart("chartContainer",'+
 		'{'+
 		'title:{'+
-		'text: "Site Traffic",'+
+		'text: "回測結果",'+
 		'fontSize: 30'+
 		'},'+
 		'animationEnabled: true,'+
+        'animationDuration: 600,'+
 		'axisX:{'+
-        'title: "Timeline(Days)",'+
+        'title: "Timeline(Days, with recent 7 years)",'+
 		'gridColor: "Silver",'+
 		'tickColor: "silver",'+
         'interval:2600,'+
@@ -121,8 +128,17 @@ function start(request,response) {
 		'showInLegend: true,'+
 		'name: "Composite Index",'+
 		'color: "#919191",'+
-		'lineThickness: 2,'+
+		'lineThickness: 1,'+
 		'dataPoints: '+ total_yaxis +
+		'},'+
+		'{        '+
+		'type: "line",'+
+		'showInLegend: true,'+
+        'visible: false,'+
+		'name: "Diff against Composite Index",'+
+		'color: "#FF0000",'+
+		'lineThickness: 2,'+
+		'dataPoints: '+ diff_yaxis +
 		'}'+
 		'],'+
 		'legend:{'+

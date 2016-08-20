@@ -443,7 +443,49 @@ bool StockSimulator::checkSellCondition(vector<float> data, int idx, vector< vec
 }
 
 void StockSimulator::run() {
-    if (stockID_ == 1) {/*TODO*/} // all stock    
+    if (stockID_ == 1) { // all stocks : use 0050 instead
+        vector < vector<float> > data = stockMap_[50];
+        vector < vector<float> > weekData = weekStockMap_[50];
+        vector < vector<float> > monthData = monthStockMap_[50];
+        hold_ = false; // true if we buy it
+        gain_.clear();
+        //gain_.push_back(0);
+        for (unsigned int i = 0; i < data.size(); ++i) { // every day
+            vector<float> dailyData = data[i];
+            //cout << i << endl;
+            if (!hold_) { // check buy condition
+                bool check = checkBuyCondition(dailyData, i, weekData, monthData);
+                if (check) {
+                    //cout << "buy at " << i << " at price " << dailyData[0] << endl;
+                    hold_ = true;
+                    buyPrice_ = dailyData[0];
+                    if (gain_.size() == 0) 
+                        gain_.push_back(1);
+                    else
+                        gain_.push_back(gain_[gain_.size() - 1]);
+                    //cout << "current gain : " << gain_[gain_.size() - 1] << endl;
+                    
+                } else {
+                    if (gain_.size() == 0) 
+                        gain_.push_back(1);
+                    else
+                        gain_.push_back(gain_[gain_.size() - 1]);
+                }
+                lastGain_ = gain_[gain_.size() - 1];
+            }
+            else { // check sell condition
+                bool check = checkSellCondition(dailyData, i, weekData, monthData);
+                if (check) {
+                    //cout << "sell at " << i << "at price " << dailyData[0] << endl;
+                    //cout << "gain " << lastGain_ * dailyData[0] / buyPrice_ << endl;
+                    hold_ = false;
+                }
+                gain_.push_back(lastGain_ * dailyData[0] / buyPrice_);
+            }
+            //cout << i << " d" << endl;
+        }
+        
+    }  
     else if (stockID_ == 2) {/*TODO*/} // 10%
     else { // single stock
         vector < vector<float> > data = stockMap_[stockID_];
