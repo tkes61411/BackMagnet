@@ -45,7 +45,7 @@
 
   <body style="text-align:center;height:100%">
     <div id="loading" style="padding:200px">
-      <img id="loading-image" style="width:100px;height:100px;" class="img-responsive center-block" src="http://app.ownminigames.com/img/loading.gif" alt="Loading..." />
+      <img id="loading-image" style="width:250px;height:250px;" class="img-responsive center-block" src="loading.gif" alt="Loading..." />
     </div>
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container" >
@@ -104,12 +104,13 @@
     </div>
     <p><a style="position:fixed;bottom:10px;right:10px;" onclick="sim()" class="btn btn-primary btn-lg"  role="button">磁力回測</a></p>
     <script>
-      $('#loading').hide();
+        $('#loading').hide();
       init();
 
       function sim()
       {
-        $('#loading').show();
+          $('#loading').show();
+          
         // Getting the height of the document
         to_c = [-1,-1,-1,-1,-1,-1,4,5,6,1,2,3,-1,16,17,18,13,14,15,-1];
         data = svg.selectAll("circle").data();
@@ -183,7 +184,7 @@
         console.log(iframe)
         iframe.attr('src','http://localhost:8888/start?'+stock+"_"+combine);
         document.getElementById('results-view').onload = function() {
-          this.style.height=1000+'px';
+          this.style.height=500+'px';
           $('#loading').hide();
         };
 
@@ -193,7 +194,6 @@
 
     
       <hr>
-
       <footer>
         <p>&copy; 2016 LaDs Company, Inc.</p>
       </footer>

@@ -163,10 +163,9 @@ function start(request,response) {
 		'<div id="chartContainer" style="height: 300px; width: 100%;">'+
 		'</div>'+
         '<h2 style="text-align:center;padding:10px;padding-top:100px;">Facebook Assistance</h2>'+
-        '<img src="https://www.facebook.com/messenger_code/generate/?image_format=image%2Fpng&image_size=420&profile_id=1698850473767941&ext=1476348581&hash=AeTBLQM2Ti9sUoeJ" height="200" width="200" style="display:block;margin: 0 auto">'+
+        '<img src="https://8-t.imgbox.com/3eexJnAi.jpg" style="display:block; margin:auto;" alt="image host" width="300px" height="300px"/>' +
 		'</body>'+
 		'</html>';
-
 
 
         //var body = '<!DOCTYPE html>'+
